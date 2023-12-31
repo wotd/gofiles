@@ -50,14 +50,14 @@ jobs:
       id: create_release
       uses: softprops/action-gh-release@v1
       with:
-        files: gofiles/*
+        files: gofiles
         tag_name: ${{ github.ref_name }}
         title: Release ${{ github.ref_name }}
 
     - name: Publish Release
       uses: softprops/action-gh-release@v1
       with:
-        files: gofiles/*
+        files: gofiles
         tag_name: ${{ github.ref_name }}
         title: Release ${{ github.ref_name }}
         overwrite: true
