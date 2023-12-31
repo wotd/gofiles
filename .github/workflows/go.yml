@@ -58,7 +58,7 @@ jobs:
       uses: softprops/action-gh-release@v1
       with:
         files: gofiles/*
-        tags: ${{ github.ref_name }}
+        tag_name: ${{ github.ref_name }}
         title: Release ${{ github.ref_name }}
         overwrite: true
       env:
