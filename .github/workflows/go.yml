@@ -26,8 +26,46 @@ jobs:
     - name: Test
       run: go test -v ./...
 
-    - uses: wangyoucao577/go-release-action@v1
+    - name: Archive artifacts
+      uses: actions/upload-artifact@v2
       with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        goos: linux
-        goarch: amd64
+        name: gofiles
+        path: gofiles
+
+  release:
+    runs-on: ubuntu-latest
+
+    needs: build
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Download artifact
+      uses: actions/download-artifact@v2
+      with:
+        name: gofiles
+        
+    - name: Create Release
+      id: create_release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: gofiles/*
+        tags: ${{ github.ref }}
+        title: Release ${{ github.ref }}
+
+    - name: Publish Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: gofiles/*
+        tags: ${{ github.ref }}
+        title: Release ${{ github.ref }}
+        overwrite: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    # - uses: wangyoucao577/go-release-action@v1
+    #   with:
+    #     github_token: ${{ secrets.GITHUB_TOKEN }}
+    #     goos: linux
+    #     goarch: amd64
