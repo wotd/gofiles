@@ -10,54 +10,69 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
+
+  build-linux:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-
     - name: Set up Go
       uses: actions/setup-go@v4
       with:
         go-version: '1.20'
-
     - name: Build
-      run: go build -v ./...
-
+      run: go build -o gofiles-amd64 -v ./...
     - name: Test
-      run: go test -v ./...
-
+      run: go test -o gofiles-amd64 -v ./...
     - name: Archive artifacts
       uses: actions/upload-artifact@v2
       with:
-        name: gofiles
-        path: gofiles
+        name: gofiles-amd64
+        path: gofiles-amd64
+
+  build-macos:
+      runs-on: macos-12
+      steps:
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.20'
+      - name: Build
+        run: go build -o gofiles-macos -v ./...
+      - name: Test
+        run: go test -o gofiles-macos -v ./...
+  
+      - name: Archive artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: gofiles-macos
+          path: gofiles-macos
 
   release:
     runs-on: ubuntu-latest
-
     needs: build
-
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
-
     - name: Download artifact
       uses: actions/download-artifact@v2
-      with:
-        name: gofiles
-        
+      # with:
+      #   name: gofiles-amd64
     - name: Create Release
       id: create_release
       uses: softprops/action-gh-release@v1
       with:
-        files: gofiles
+        files: |
+          gofiles-amd64
+          gofiles-macos
         tag_name: ${{ github.ref_name }}
         title: Release ${{ github.ref_name }}
 
     - name: Publish Release
       uses: softprops/action-gh-release@v1
       with:
-        files: gofiles
+        files: |
+          gofiles-amd64
+          gofiles-macos
         tag_name: ${{ github.ref_name }}
         title: Release ${{ github.ref_name }}
         overwrite: true

@@ -21,7 +21,7 @@ func main() {
 	)
 
 	flag.StringVar(&path, "path", "/tmp", "Path where directories and files will be created")
-	flag.StringVar(&name, "name", "ddn", "This string will be part of directories and files names")
+	flag.StringVar(&name, "name", "xyz", "This string will be part of directories and files names")
 	flag.StringVar(&file_size, "file_size", "10M", "Size of files. Can be single also range, like: 10k-102M")
 
 	flag.IntVar(&file_number, "file-number", 10, "Max number of files that will be created")

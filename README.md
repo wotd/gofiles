@@ -36,7 +36,7 @@ Usage of ./gofiles:
 | dir-number  |       3       | Max number of subdirectories to be created for each di            |
 | file-number |       10      | Max number of files to be created                                 |
 | file_size   |      10M      | Size of files. Can be fixed (eg. 10k/M/G) or range (eg. 100M-23G) |
-| name        |      ddn      | This name will be added to directories and files names            |
+| name        |      xyz      | This name will be added to directories and files names            |
 | path        |      /tmp     | Path where directories and files will be created                  |
 
 ### More advanced example
