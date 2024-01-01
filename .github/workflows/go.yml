@@ -29,42 +29,41 @@ jobs:
         name: gofiles-amd64
         path: gofiles-amd64
 
-  build-macos:
-      runs-on: macos-12
-      steps:
-      - uses: actions/checkout@v3
-      - name: Set up Go
-        uses: actions/setup-go@v4
-        with:
-          go-version: '1.20'
-      - name: Build
-        run: go build -o gofiles-macos
-      - name: Test
-        run: go test -o gofiles-macos
+  # build-macos:
+  #     runs-on: macos-12
+  #     steps:
+  #     - uses: actions/checkout@v3
+  #     - name: Set up Go
+  #       uses: actions/setup-go@v4
+  #       with:
+  #         go-version: '1.20'
+  #     - name: Build
+  #       run: go build -o gofiles-macos
+  #     - name: Test
+  #       run: go test -o gofiles-macos
   
-      - name: Archive artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: gofiles-macos
-          path: gofiles-macos
+  #     - name: Archive artifacts
+  #       uses: actions/upload-artifact@v2
+  #       with:
+  #         name: gofiles-macos
+  #         path: gofiles-macos
 
   release:
     runs-on: ubuntu-latest
-    needs: [build-linux, build-macos]
+    needs: [build-linux]
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
     - name: Download artifact
       uses: actions/download-artifact@v2
-      # with:
-      #   name: gofiles-amd64
+      with:
+        name: gofiles-amd64
     - name: Create Release
       id: create_release
       uses: softprops/action-gh-release@v1
       with:
         files: |
           gofiles-amd64
-          gofiles-macos
         tag_name: ${{ github.ref_name }}
         title: Release ${{ github.ref_name }}
 
@@ -73,7 +72,6 @@ jobs:
       with:
         files: |
           gofiles-amd64
-          gofiles-macos
         tag_name: ${{ github.ref_name }}
         title: Release ${{ github.ref_name }}
         overwrite: true
